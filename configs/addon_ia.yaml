@@ -1,0 +1,21 @@
+# IA-Mamba add-on (A4'): IA-VSS blocks on the stride-8 P3 and stride-4 output of the DCN neck,
+# innovation maps of both stages into the heatmap head.
+base: addon_vss.yaml
+name: addon_ia
+arch: dlaia_34
+model:
+  ia:
+    kernel: 7                   # local normalisation window k
+    tau: 0.5                    # soft-min temperature τ
+    fusion: softmin
+    local_norm: true
+    predictor: linear           # P: d_inner x d_inner, zero-initialised
+    modulate: true              # Δ(l+1) = softplus(W x + b) + γ softplus(a E(l) + c)
+    to_head: true
+    lower_bound: true
+    target: delta
+    cross_level: true           # the first stride-4 block reads the stride-8 E, so every
+                                # stride-4 block is modulated (first batch: P2 never was)
+    head_levels: [0, 1]         # stride-4 and stride-8 E into the heatmap head
+loss:
+  pred_weight: 0.1              # λ_pred

@@ -1,0 +1,8 @@
+# IA-Mamba add-on ablation A5: no lower bound on the modulation,
+# Δ = softplus(W x + b + γ (a E + c)) instead of softplus(W x + b) + γ softplus(a E + c).
+# γ stays >= 0 (zero-initialised); a and c are free, so Δ is lowered wherever a E + c < 0.
+base: addon_ia.yaml
+name: addon_ia_a5
+model:
+  ia:
+    lower_bound: false

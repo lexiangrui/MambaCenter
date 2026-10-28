@@ -1,0 +1,24 @@
+# CP-Mamba add-on (B5'): coarse heatmap on the stride-8 map -> centre prior S -> CP-SSM
+# blocks at stride 4 (prior-raised Δ, low-to-high priority route over the top-15% tokens).
+base: addon_vss.yaml
+name: addon_cp
+arch: dlacp_34
+model:
+  cp:
+    use_cp_block: true
+    regular_routes: [h, v]      # dense horizontal / vertical routes
+    delta_mod: true             # Δ = softplus(W x + b + α s), α >= 0
+    alpha_init: 1.0             # e^1 ≈ 2.7x Δ at prior peaks (first batch: α0 = 0 stayed at 0.12)
+    ramp_delta: true            # α off in warm-up, faded in with the priority route
+    priority: true
+    sparse_ratio: 0.15          # ρ
+    extra_ratio: 0.05           # random extra tokens while training
+    bins: 4                     # B
+    descending: false           # candidates last
+    dilate: true                # 3x3 max-pool of the upsampled prior
+    detach_prior: false         # CP-SSM gradient flows into the coarse branch
+    warmup_epochs: 5            # priority route and Δ modulation off, then
+    ramp_epochs: 5              # faded in linearly
+    head_conv: 128
+loss:
+  coarse_weight: 0.5            # λ_c

@@ -1,0 +1,6 @@
+{
+  "upstream_commit": "10b5d6358f27966f6a40e4bf0baa17a460688128",
+  "upstream_version": "2.2.6.post3",
+  "origin": "Pinned upstream selective-scan source with compatibility patches; binaries rebuilt per machine",
+  "upstream_license": "mamba/LICENSE"
+}

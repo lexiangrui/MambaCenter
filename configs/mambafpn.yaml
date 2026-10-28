@@ -1,0 +1,11 @@
+# Direct baseline of both ideas (IA A1): DLA-34 + plain VSS Mamba-FPN + CenterNet heads.
+base: _base.yaml
+name: mambafpn
+arch: mambafpn_34
+model:
+  neck:
+    dims: [64, 128, 128, 128]     # P2, P3, P4, P5 channels
+    depths: [1, 2, 2, 2]          # VSS blocks per level
+    expands: [1, 2, 2, 2]         # P2 expand=1 bounds stride-4 memory
+    d_state: 16
+    checkpoint: true              # recompute each block in backward (same math, less memory)

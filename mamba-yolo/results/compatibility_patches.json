@@ -1,0 +1,31 @@
+[
+  {
+    "file": "ultralytics/nn/tasks.py",
+    "old": "torch.load(file, map_location=\"cpu\")",
+    "new": "torch.load(file, map_location=\"cpu\", weights_only=False)",
+    "count": 2
+  },
+  {
+    "file": "ultralytics/utils/torch_utils.py",
+    "old": "torch.load(f, map_location=torch.device(\"cpu\"))",
+    "new": "torch.load(f, map_location=torch.device(\"cpu\"), weights_only=False)",
+    "count": 1
+  },
+  {
+    "file": "ultralytics/engine/validator.py",
+    "old": "self.args.half = self.device.type != \"cpu\"  # force FP16 val during training",
+    "new": "self.args.half = False  # CGM matched evaluation uses FP32",
+    "count": 1
+  },
+  {
+    "file": "selective_scan/csrc/selective_scan/reverse_scan.cuh",
+    "reason": "CUDA13 CUB removed LaneId and CTA_SYNC",
+    "replacement": "PTX laneid read and __syncthreads, matching the original utility operations"
+  },
+  {
+    "file": "ultralytics/nn/autobackend.py",
+    "old": "fuse=True",
+    "new": "fuse=False",
+    "reason": "Consistent unfused FP32 standalone validation and benchmark."
+  }
+]

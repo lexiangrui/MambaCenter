@@ -1,0 +1,18 @@
+# Add-on control of both ideas (A1'): the original CenterNet DLA-34 + DCN neck, kept intact,
+# plus zero-initialised residual plain VSS blocks on its stride-8 P3 and stride-4 output.
+base: _base.yaml
+name: addon_vss
+arch: dlavss_34
+model:
+  addon:
+    depth8: 2               # blocks on the DLAUp P3 map (128 ch) before the final IDAUp
+    depth4: 2               # blocks on the IDAUp output (64 ch) the heads read
+    expand8: 2
+    expand4: 1              # stride-4 expand=1 bounds memory
+    mlp_ratio: 4.0          # VMamba feed-forward sub-block in every block
+    d_state: 16
+    checkpoint: true        # recompute each block in backward (same math, less memory)
+    micro_batch: 5          # run/recompute blocks 5 images at a time (per-image math, same
+                            # result); full-batch blocks need 28 GiB (VSS) or OOM (IA) at bs 20
+train:
+  new_lr_mult: 5            # add-on parameters at 5x the shared lr; shared parts unchanged

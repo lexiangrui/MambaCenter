@@ -1,0 +1,27 @@
+# Common VisDrone recipe of every CenterNet-family model (docs/实验方案.md).
+# Models differ only in arch / model / auxiliary loss weights.
+dataset: visdrone
+seed: 317
+input_res: 960            # train crops 960x960; test long side 960 (CenterNet fix_res)
+head_conv: 256
+train:
+  batch_size: 20          # largest batch every model fits on one RTX 5090 (IA-Mamba 27.8 GiB, tools/probe.py)
+  lr: 7.8125e-5           # CenterNet Adam rule 5e-4 per 128 images, linear in batch size
+  new_lr_mult: 1          # lr factor of parameters the DCN baseline lacks (add-on models only)
+  lr_step: [90, 120]      # CenterNet 1x schedule: x0.1 after epochs 90 and 120
+  epochs: 140
+  warmup_iters: 500       # linear warm-up for the randomly initialised necks
+  amp: bf16               # scans, focal loss and evaluation stay fp32
+  num_workers: 8          # ~20 img/s per worker; keeps host RAM well below 32 GB
+  log_interval: 50
+  clip_grad: null
+loss:
+  hm_weight: 1
+  wh_weight: 0.1
+  off_weight: 1
+eval:
+  K: 500                  # CenterNet top-K decode = detections per image
+  max_dets: [100, 500]    # COCO default 100; VisDrone protocol 500
+  interval: 10            # epochs between val evaluations (final epoch always)
+  batch_size: 8
+  workers: 4

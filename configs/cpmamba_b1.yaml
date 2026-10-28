@@ -1,0 +1,9 @@
+# CP-Mamba ablation B1: plain VSS neck + coarse P3 heatmap as an auxiliary task only.
+base: mambafpn.yaml
+name: cpmamba_b1
+arch: cpmamba_34
+model:
+  cp:
+    use_cp_block: false
+loss:
+  coarse_weight: 0.5

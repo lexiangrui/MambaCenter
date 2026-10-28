@@ -1,0 +1,27 @@
+# Install matching torch / torchvision builds for your CUDA environment first.
+# CUDA extensions are compiled separately; see docs/环境配置.md.
+numpy
+Pillow
+opencv-python
+pycocotools
+PyYAML
+einops
+timm
+ninja
+packaging
+setuptools
+wheel
+tqdm
+matplotlib
+scipy
+pandas
+requests
+psutil
+py-cpuinfo
+seaborn
+ultralytics-thop
+progress
+numba
+tensorboardX
+Cython
+easydict

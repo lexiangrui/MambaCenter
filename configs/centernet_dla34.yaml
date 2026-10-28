@@ -1,0 +1,4 @@
+# Original CenterNet: DLA-34 + DLAUp/IDAUp with DCNv2 (modulated deformable conv).
+base: _base.yaml
+name: centernet_dla34
+arch: dla_34

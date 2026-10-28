@@ -1,0 +1,9 @@
+# CP-Mamba add-on ablation B1': A1' + coarse heatmap on the stride-8 map as an auxiliary task.
+base: addon_vss.yaml
+name: addon_cp_b1
+arch: dlacp_34
+model:
+  cp:
+    use_cp_block: false
+loss:
+  coarse_weight: 0.5
